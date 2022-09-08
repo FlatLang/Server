@@ -1,0 +1,11 @@
+package flat/server
+
+class {
+  public construct(private native Object req) {
+
+  }
+
+  send(String data) {
+
+  }
+}

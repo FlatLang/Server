@@ -1,0 +1,89 @@
+package flat/server
+
+class {
+  native Object expressObj
+
+  public construct() {
+    external {
+      #{expressObj} = #{Global.express}();
+    }
+  }
+
+  public async listen(Int port) {
+    external {
+      await new Promise((resolve, reject) => {
+        #{expressObj}.listen(#{port}, (...args) => {
+          resolve(args);
+        });
+      });
+    }
+  }
+
+  public get(String path, onRequest(Request, Response)) {
+    handle("get", path, onRequest)
+  }
+
+  public post(String path, onRequest(Request, Response)) {
+    handle("post", path, onRequest)
+  }
+
+  public put(String path, onRequest(Request, Response)) {
+    handle("put", path, onRequest)
+  }
+
+  public delete(String path, onRequest(Request, Response)) {
+    handle("delete", path, onRequest)
+  }
+
+  public head(String path, onRequest(Request, Response)) {
+    handle("head", path, onRequest)
+  }
+
+  public connect(String path, onRequest(Request, Response)) {
+    handle("connect", path, onRequest)
+  }
+
+  public options(String path, onRequest(Request, Response)) {
+    handle("options", path, onRequest)
+  }
+
+  public trace(String path, onRequest(Request, Response)) {
+    handle("trace", path, onRequest)
+  }
+
+  public patch(String path, onRequest(Request, Response)) {
+    handle("patch", path, onRequest)
+  }
+
+  public handle(String method, String path, onRequest(Request, Response)) {
+    var native Object reqObj
+    var native Object resObj
+
+    external {
+      #{expressObj}[#{method.chars.data}](#{path.chars.data}, (req, res) => {
+        #{reqObj} = req;
+        #{resObj} = res;
+
+        #{onRequest(wrapRequest(reqObj), wrapResponse(resObj))};
+      });
+    }
+  }
+
+  static wrapRequest(native Object req) -> Request {
+    return Request(req)
+  }
+
+  static wrapResponse(native Object res) -> Response {
+    return Response(res)
+  }
+
+  public static class Global {
+    visible static lazy Object express {
+      get {
+        external {
+          return require('express');
+        }
+      }
+    }
+  }
+}
