@@ -13,6 +13,12 @@ class {
     }
   }
 
+  public status(Int statusCode) {
+    external {
+      #{res}.status(#{statusCode});
+    }
+  }
+
   public setHeaders(HashMap<String, Object> headers) {
     headers.forEach(entry => setHeader(entry.key, entry.value.toString()))
   }
