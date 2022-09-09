@@ -23,43 +23,43 @@ class {
     }
   }
 
-  public get(String path, onRequest(Request, Response)) {
+  public get(String path, async onRequest(Request, Response)) {
     handle("get", path, onRequest)
   }
 
-  public post(String path, onRequest(Request, Response)) {
+  public post(String path, async onRequest(Request, Response)) {
     handle("post", path, onRequest)
   }
 
-  public put(String path, onRequest(Request, Response)) {
+  public put(String path, async onRequest(Request, Response)) {
     handle("put", path, onRequest)
   }
 
-  public delete(String path, onRequest(Request, Response)) {
+  public delete(String path, async onRequest(Request, Response)) {
     handle("delete", path, onRequest)
   }
 
-  public head(String path, onRequest(Request, Response)) {
+  public head(String path, async onRequest(Request, Response)) {
     handle("head", path, onRequest)
   }
 
-  public connect(String path, onRequest(Request, Response)) {
+  public connect(String path, async onRequest(Request, Response)) {
     handle("connect", path, onRequest)
   }
 
-  public options(String path, onRequest(Request, Response)) {
+  public options(String path, async onRequest(Request, Response)) {
     handle("options", path, onRequest)
   }
 
-  public trace(String path, onRequest(Request, Response)) {
+  public trace(String path, async onRequest(Request, Response)) {
     handle("trace", path, onRequest)
   }
 
-  public patch(String path, onRequest(Request, Response)) {
+  public patch(String path, async onRequest(Request, Response)) {
     handle("patch", path, onRequest)
   }
 
-  public handle(String method, String path, onRequest(Request, Response)) {
+  public handle(String method, String path, async onRequest(Request, Response)) {
     var native Object reqObj
     var native Object resObj
 
@@ -71,7 +71,7 @@ class {
 
     try {
       external {
-        #{expressObj}[#{method.chars.data}](#{path.chars.data}, (req, res) => {
+        #{expressObj}[#{method.chars.data}](#{path.chars.data}, async (req, res) => {
           #{reqObj} = req;
           #{resObj} = res;
 
@@ -83,7 +83,7 @@ class {
               |")
           }
 
-          #{onRequest(wrapRequest(reqObj), wrapResponse(resObj))};
+          await #{onRequest(wrapRequest(reqObj), wrapResponse(resObj))$};
 
           #{
             log.debug("|
