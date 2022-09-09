@@ -63,17 +63,44 @@ class {
     var native Object reqObj
     var native Object resObj
 
+    log.debug("|
+      Setting up request handler:
+        method: #{method}
+        path: #{path}
+      |")
+
     try {
       external {
         #{expressObj}[#{method.chars.data}](#{path.chars.data}, (req, res) => {
           #{reqObj} = req;
           #{resObj} = res;
 
+          #{
+            log.debug("|
+              Handling request:
+                method: #{method}
+                path: #{path}
+              |")
+          }
+
           #{onRequest(wrapRequest(reqObj), wrapResponse(resObj))};
+
+          #{
+            log.debug("|
+              Finished handling request:
+                method: #{method}
+                path: #{path}
+              |")
+          }
         });
       }
     } catch (Exception e) {
-      log.error("Exception encountered while handling request: #{e.message}")
+      log.error("|
+        Exception encountered while handling request:
+          method: #{method}
+          path: #{path}
+          error: #{e.message}
+        |")
       external {
         if (#{e}.error) {
           console.error(#{e}.error);
