@@ -10,7 +10,6 @@
   },
   "sources": {
     "main": {
-      "mainClass": "flat/server/Server",
       "source": "src",
       "dependencies": {
         "github:FlatLang/System": "master",
