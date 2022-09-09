@@ -1,6 +1,10 @@
 package flat/server
 
+import flat/log/Logger
+
 class {
+  let static Logger log = Logger(Server.class)
+
   native Object expressObj
 
   public construct() {
@@ -59,13 +63,22 @@ class {
     var native Object reqObj
     var native Object resObj
 
-    external {
-      #{expressObj}[#{method.chars.data}](#{path.chars.data}, (req, res) => {
-        #{reqObj} = req;
-        #{resObj} = res;
+    try {
+      external {
+        #{expressObj}[#{method.chars.data}](#{path.chars.data}, (req, res) => {
+          #{reqObj} = req;
+          #{resObj} = res;
 
-        #{onRequest(wrapRequest(reqObj), wrapResponse(resObj))};
-      });
+          #{onRequest(wrapRequest(reqObj), wrapResponse(resObj))};
+        });
+      }
+    } catch (Exception e) {
+      log.error("Exception encountered while handling request: #{e.message}")
+      external {
+        if (#{e}.error) {
+          console.error(#{e}.error);
+        }
+      }
     }
   }
 
