@@ -1,6 +1,7 @@
 package flat/server
 
 import flat/log/Logger
+import flatlang/time/Timer
 
 class {
   let static Logger log = Logger(Server.class)
@@ -73,9 +74,13 @@ class {
         path: #{path}
       |")
 
+    let timer = Timer():start()
+
     try {
       onRequest(request, response)
+      timer.stop();
     } catch (Exception e) {
+      timer.stop()
       external {
         if (#{e}.error) {
           console.error(#{e}.error);
@@ -95,7 +100,7 @@ class {
     }
 
     log.debug("|
-      Finished handling request:
+      Finished handling request (#{timer.duration}ms):
         method: #{method}
         path: #{path}
       |")
