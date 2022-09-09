@@ -10,6 +10,7 @@ class {
   public construct() {
     external {
       #{expressObj} = #{Global.express}();
+      #{expressObj}.disable("x-powered-by");
     }
   }
 
