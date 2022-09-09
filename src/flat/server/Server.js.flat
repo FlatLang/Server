@@ -60,7 +60,52 @@ class {
     handle("patch", path, onRequest)
   }
 
-  public handle(String method, String path, async onRequest(Request, Response)) {
+  static async handleRunRequest(
+    String method,
+    String path,
+    Request request,
+    Response response,
+    async onRequest(Request, Response)
+  ) {
+    log.debug("|
+      Handling request:
+        method: #{method}
+        path: #{path}
+      |")
+
+    try {
+      onRequest(request, response)
+    } catch (Exception e) {
+      external {
+        if (#{e}.error) {
+          console.error(#{e}.error);
+        }
+      }
+      log.error("|
+        Exception encountered while handling request:
+          method: #{method}
+          path: #{path}
+          error: #{e.message}
+        |")
+
+      response
+        :setHeader("Content-Type", "text/html")
+        :status(500)
+        :send("500 Error")
+    }
+
+    log.debug("|
+      Finished handling request:
+        method: #{method}
+        path: #{path}
+      |")
+  }
+
+  public handle(
+    String method,
+    String path,
+    async onRequest(Request, Response)
+  ) {
     var native Object reqObj
     var native Object resObj
 
@@ -70,43 +115,21 @@ class {
         path: #{path}
       |")
 
-    try {
-      external {
-        #{expressObj}[#{method.chars.data}](#{path.chars.data}, async (req, res) => {
-          #{reqObj} = req;
-          #{resObj} = res;
+    external {
+      #{expressObj}[#{method.chars.data}](#{path.chars.data}, async (req, res) => {
+        #{reqObj} = req;
+        #{resObj} = res;
 
-          #{
-            log.debug("|
-              Handling request:
-                method: #{method}
-                path: #{path}
-              |")
-          }
-
-          await #{onRequest(wrapRequest(reqObj), wrapResponse(resObj))$};
-
-          #{
-            log.debug("|
-              Finished handling request:
-                method: #{method}
-                path: #{path}
-              |")
-          }
-        });
-      }
-    } catch (Exception e) {
-      log.error("|
-        Exception encountered while handling request:
-          method: #{method}
-          path: #{path}
-          error: #{e.message}
-        |")
-      external {
-        if (#{e}.error) {
-          console.error(#{e}.error);
-        }
-      }
+        await #{
+          handleRunRequest(
+            method,
+            path,
+            wrapRequest(reqObj),
+            wrapResponse(resObj),
+            onRequest
+          )$
+        };
+      });
     }
   }
 
