@@ -1,6 +1,6 @@
 package flat/server
 
-import flatlang/datastruct/HashMap
+import flat/datastruct/HashMap
 
 class {
   public construct(private native Object res) {
