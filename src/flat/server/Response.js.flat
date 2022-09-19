@@ -34,4 +34,16 @@ class {
       #{res}.setHeader(#{key.chars.data}, #{value.chars.data});
     }
   }
+
+  public redirect(String url) {
+    external {
+      #{res}.redirect(#{url.chars.data});
+    }
+  }
+
+  public redirect(String url, Int statusCode) {
+    external {
+      #{res}.redirect(#{statusCode}, #{url.chars.data});
+    }
+  }
 }
