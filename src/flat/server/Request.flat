@@ -1,5 +1,8 @@
 package flat/server
 
+import flat/datastruct/HashMap
+
 class {
+  visible let HashMap<String, String> params = HashMap()
 
 }
