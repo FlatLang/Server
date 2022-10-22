@@ -78,7 +78,7 @@ class {
 
     try {
       onRequest(request, response)
-      timer.stop();
+      timer.stop()
     } catch (Exception e) {
       timer.stop()
       external {
