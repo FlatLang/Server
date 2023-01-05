@@ -25,39 +25,39 @@ class {
     }
   }
 
-  public get(String path, async onRequest(Request, Response)) {
+  public get(String path, async onRequest(Request req, Response res)) {
     handle("get", path, onRequest)
   }
 
-  public post(String path, async onRequest(Request, Response)) {
+  public post(String path, async onRequest(Request req, Response res)) {
     handle("post", path, onRequest)
   }
 
-  public put(String path, async onRequest(Request, Response)) {
+  public put(String path, async onRequest(Request req, Response res)) {
     handle("put", path, onRequest)
   }
 
-  public delete(String path, async onRequest(Request, Response)) {
+  public delete(String path, async onRequest(Request req, Response res)) {
     handle("delete", path, onRequest)
   }
 
-  public head(String path, async onRequest(Request, Response)) {
+  public head(String path, async onRequest(Request req, Response res)) {
     handle("head", path, onRequest)
   }
 
-  public connect(String path, async onRequest(Request, Response)) {
+  public connect(String path, async onRequest(Request req, Response res)) {
     handle("connect", path, onRequest)
   }
 
-  public options(String path, async onRequest(Request, Response)) {
+  public options(String path, async onRequest(Request req, Response res)) {
     handle("options", path, onRequest)
   }
 
-  public trace(String path, async onRequest(Request, Response)) {
+  public trace(String path, async onRequest(Request req, Response res)) {
     handle("trace", path, onRequest)
   }
 
-  public patch(String path, async onRequest(Request, Response)) {
+  public patch(String path, async onRequest(Request req, Response res)) {
     handle("patch", path, onRequest)
   }
 
@@ -66,7 +66,7 @@ class {
     String path,
     Request request,
     Response response,
-    async onRequest(Request, Response)
+    async onRequest(Request req, Response res)
   ) {
     log.debug("|
       Handling request:
@@ -109,7 +109,7 @@ class {
   public handle(
     String method,
     String path,
-    async onRequest(Request, Response)
+    async onRequest(Request req, Response res)
   ) {
     var native Object reqObj
     var native Object resObj
