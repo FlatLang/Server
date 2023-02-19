@@ -13,5 +13,14 @@ class {
         #{params.add(String(paramKey), String(paramValue))};
       });
     }
+
+    external {
+      Object.entries(#{req}.query).forEach(([key, value]) => {
+        #{paramKey} = key;
+        #{paramValue} = value;
+
+        #{query.add(String(paramKey), String(paramValue))};
+      });
+    }
   }
 }
