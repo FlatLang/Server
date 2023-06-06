@@ -3,7 +3,7 @@ package flat/server
 import flat/datastruct/HashMap
 
 class {
-  visible let HashMap<String, String> params = HashMap()
-  visible let HashMap<String, String> query = HashMap()
+    visible let HashMap<String, String> params = HashMap()
+    visible let HashMap<String, String> query = HashMap()
 
 }
